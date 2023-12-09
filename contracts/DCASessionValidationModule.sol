@@ -29,8 +29,9 @@ contract DCASessionValidationModule is ISessionValidationModule {
         bytes calldata _sessionKeyData,
         bytes calldata /*_callSpecificData*/
     ) external virtual override returns (address) {
-        address sessionKey = abi.decode(_sessionKeyData, (address));
-
+        ( address sessionKey, uint256 expiryTimestamp )  = abi.decode(_sessionKeyData, (address, uint256));
+        
+        require (block.timestamp < expiryTimestamp, "Your session key has already expired.");
         return sessionKey;
     }
 
@@ -49,8 +50,12 @@ contract DCASessionValidationModule is ISessionValidationModule {
         bytes32 _userOpHash,
         bytes calldata _sessionKeyData,
         bytes calldata _sessionKeySignature
-    ) external pure override returns (bool) {
-        address sessionKey = abi.decode(_sessionKeyData, (address));
+    ) external view override returns (bool) {
+        ( address sessionKey, uint256 expiryTimestamp )  = abi.decode(_sessionKeyData, (address, uint256));
+
+        if(expiryTimestamp < block.timestamp){
+            revert("Your session key has already expired. ");
+        }
 
         return
             ECDSA.recover(
