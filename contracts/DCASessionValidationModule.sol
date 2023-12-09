@@ -32,6 +32,7 @@ contract DCASessionValidationModule is ISessionValidationModule {
         ( address sessionKey, uint256 expiryTimestamp )  = abi.decode(_sessionKeyData, (address, uint256));
         
         require (block.timestamp < expiryTimestamp, "Your session key has already expired.");
+        address sessionKey = abi.decode(_sessionKeyData, (address));
         return sessionKey;
     }
 
