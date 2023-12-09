@@ -27,12 +27,6 @@ export default function Home() {
     </Link>
     </div>
   </div>
-  {/* <button onClick={openModal}>Open Modal</button>
-
-      <Modal isOpen={isOpen} onClose={closeModal}>
-        <h2>This is the Modal Content</h2>
-        <p>Replace this with your actual modal content.</p>
-      </Modal> */}
 </div>
   );
 }
